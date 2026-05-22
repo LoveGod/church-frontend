@@ -1,7 +1,7 @@
 {
     // https://nuxt.com/docs/guide/concepts/typescript
     "files": [],
-    "references": [
+    /*"references": [
         {
             "path": "./.nuxt/tsconfig.app.json"
         },
@@ -14,5 +14,74 @@
         {
             "path": "./.nuxt/tsconfig.node.json"
         }
-    ]
+    ],*/
+    "extends": "./.nuxt/tsconfig.json",
+    "compilerOptions": {
+        "composite": true,
+        "target": "ES2022",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        /* =========================================
+         * Module Resolution
+         * ========================================= */
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        /* =========================================
+         * Strictness
+         * ========================================= */
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true /** Prevents: undefined crashes, nullable API mistakes, composable state bugs */,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "useUnknownInCatchVariables": true,
+
+        /* =========================================
+         * Additional Safety
+         * ========================================= */
+        "noUncheckedIndexedAccess": true /** Prevents: array out-of-bounds errors, object property access mistakes */,
+        "exactOptionalPropertyTypes": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "forceConsistentCasingInFileNames": true,
+
+        /* =========================================
+         * Code Quality
+         * ========================================= */
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+
+        /* =========================================
+         * Performance
+         * ========================================= */
+        "skipLibCheck": true,
+
+        /* =========================================
+         * Source Maps
+         * ========================================= */
+        "sourceMap": true,
+
+        /* =========================================
+         * Types
+         * ========================================= */
+        "types": ["node"],
+
+        /* =========================================
+         * Path Aliases
+         * ========================================= */
+        //"baseUrl": ".",
+        "paths": {
+            "@/*": ["./*"],
+            "~/*": ["./*"],
+            "@core/*": ["./core/*"],
+            "@server/*": ["./server/*"],
+            "@types/*": ["./types/*"]
+        }
+    },
+
+    "exclude": ["node_modules", "dist", ".output", ".nuxt"]
 }

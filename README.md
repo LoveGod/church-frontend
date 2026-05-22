@@ -73,3 +73,10 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+```bash
+npx nuxi prepare  #This generates: .nuxt/
+npm run lint
+npm run typecheck
+npm run build
+```
