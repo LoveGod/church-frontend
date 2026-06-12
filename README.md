@@ -80,3 +80,13 @@ npm run lint
 npm run typecheck
 npm run build
 ```
+
+## 🏛️ Auth Architecture
+
+```bash
+
+[ Browser / SSR ] ──( Pinia Store ) ──( useCookie: 'auth_token' )
+        │
+   [ useFetch ] ──( Auto-attaches Bearer Token ) ──> [ External API ]
+
+```

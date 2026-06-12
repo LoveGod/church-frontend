@@ -1,14 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from 'nuxt/config'
+import type { NuxtConfig } from 'nuxt/schema'
 
-export default defineNuxtConfig({
+const config: NuxtConfig = {
     compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
     css: ['~/assets/css/main.css'],
-    devServer: {
-        host: '0.0.0.0', // Required for DDEV networking
-        port: 3000,
-    },
     vite: {
         server: {
             allowedHosts: ['.ddev.site'], // Allow DDEV hostnames
@@ -29,5 +26,14 @@ export default defineNuxtConfig({
             },
         },
     },
-    modules: ['@nuxtjs/tailwindcss', '@nuxt/eslint'],
-})
+    runtimeConfig: {
+        public: {
+            payloadUrl: process.env.PAYLOAD_URL || 'http://localhost:3000',
+        },
+    },
+    modules: ['@nuxtjs/tailwindcss', '@nuxt/eslint', '@pinia/nuxt'],
+}
+
+const nuxtConfig: NuxtConfig = defineNuxtConfig(config)
+
+export default nuxtConfig
