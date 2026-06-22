@@ -68,20 +68,21 @@
         /* =========================================
          * Types
          * ========================================= */
-        "types": ["node"],
+        "types": ["node", "@types/node"]
 
         /* =========================================
          * Path Aliases
          * ========================================= */
         //"baseUrl": ".",
-        "paths": {
+        /*"paths": {
             "@/*": ["./*"],
             "~/*": ["./*"],
             "@core/*": ["./core/*"],
             "@server/*": ["./server/*"],
-            "@types/*": ["./types/*"]
-        }
+            "@types/*": ["./app/types/*"]
+        }*/
     },
 
-    "exclude": ["node_modules", "dist", ".output", ".nuxt"]
+    "exclude": ["node_modules", "dist", ".output", ".nuxt"],
+    "include": ["**/*.ts", "**/*.vue", "types/**/*.d.ts", "app/types/**/*.d.ts"]
 }

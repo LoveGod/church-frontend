@@ -28,10 +28,22 @@ const config: NuxtConfig = {
     },
     runtimeConfig: {
         public: {
-            payloadUrl: process.env.PAYLOAD_URL || 'http://localhost:3000',
+            payloadUrl: process.env.PAYLOAD_URL || 'http://localhost:3001',
+            payloadApiKey: process.env.PAYLOAD_API_KEY,
         },
     },
-    modules: ['@nuxtjs/tailwindcss', '@nuxt/eslint', '@pinia/nuxt'],
+    modules: [
+        '@nuxt/eslint',
+        '@pinia/nuxt',
+        '@nuxt/ui',
+        '@nuxt/image',
+    ],
+    /*image: {
+        provider: 'twicpics',
+        twicpics: {
+            baseURL: 'http://localhost:3001/',
+        },
+    },*/
 }
 
 const nuxtConfig: NuxtConfig = defineNuxtConfig(config)

@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
-import type { LoginResponse, User } from '~/types/auth'
+import type { LoginResponse, User } from '../types/auth'
+import { useCookie } from 'nuxt/app'
+import { computed, ref } from 'vue'
+import { usePayloadApi } from '../composables/usePayloadApi'
 
 export const useAuthStore = defineStore('auth', () => {
     const token = useCookie<string | null>('payload-token', {
@@ -8,6 +11,8 @@ export const useAuthStore = defineStore('auth', () => {
         sameSite: 'lax',
     })
 
+    const payloadApi = usePayloadApi()
+
     const user = ref<User | null>(null)
 
     const isAuthenticated = computed(() => {
@@ -15,15 +20,23 @@ export const useAuthStore = defineStore('auth', () => {
     })
 
     async function login(email: string, password: string) {
-        const { $payloadApi } = useNuxtApp()
+        //const { $payloadApi } = useNuxtApp()
         try {
-            const response = await $payloadApi<LoginResponse>('/users/login', {
+            const response = await payloadApi<LoginResponse>('/users/login', {
                 method: 'POST',
                 body: {
                     email,
                     password,
                 },
             })
+
+            /*const response = await $payloadApi<LoginResponse>('/users/login', {
+                method: 'POST',
+                body: {
+                    email,
+                    password,
+                },
+            })*/
 
             token.value = response.token
             user.value = response.user
@@ -42,9 +55,9 @@ export const useAuthStore = defineStore('auth', () => {
         }
 
         try {
-            const { $payloadApi } = useNuxtApp()
+            //const { $payloadApi } = useNuxtApp()
 
-            const response = await $payloadApi<{
+            const response = await payloadApi<{
                 user: User
             }>('/users/me')
 
@@ -63,7 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
         token.value = null
         user.value = null
 
-        await navigateTo('/login')
+        //await navigateTo('/login')
     }
 
     return {

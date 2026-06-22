@@ -1,8 +1,13 @@
-export default defineNuxtPlugin(() => {
+/*import { defineNuxtPlugin, useCookie, useRuntimeConfig } from 'nuxt/app'
+import type { $Fetch } from 'ofetch'
+
+//type PayloadApi = ReturnType<typeof $fetch.create>
+
+export default defineNuxtPlugin<{ payloadApi: $Fetch }>(() => {
     const config = useRuntimeConfig()
     const token = useCookie<string | null>('payload-token')
 
-    const payloadApi = $fetch.create({
+    const $payloadApi: $Fetch = $fetch.create({
         baseURL: `${config.public.payloadUrl}/api`,
 
         onRequest({ options }) {
@@ -23,7 +28,8 @@ export default defineNuxtPlugin(() => {
 
     return {
         provide: {
-            payloadApi,
+            payloadApi: $payloadApi,
         },
     }
 })
+*/
