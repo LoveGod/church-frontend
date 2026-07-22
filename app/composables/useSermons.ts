@@ -2,6 +2,21 @@ import { usePayloadApi } from './usePayloadApi'
 import type { SermonResponse } from '../types/sermon'
 import { useAsyncData } from '#app'
 
+type SermonFeedMode = 'recent' | 'featured' | 'series' | 'speaker' | 'topic'
+
+type SermonFeedRelationship = string | { id: string } | null | undefined
+
+export interface SermonFeedBlock {
+    mode?: SermonFeedMode | null
+    limit?: number | null
+    series?: SermonFeedRelationship
+    speaker?: SermonFeedRelationship
+    topic?: SermonFeedRelationship
+}
+
+const getRelationshipId = (relationship: SermonFeedRelationship) =>
+    typeof relationship === 'string' ? relationship : relationship?.id
+
 export const useSermons = () => {
     //const config = useRuntimeConfig()
 
@@ -39,6 +54,84 @@ export const useSermons = () => {
         }
     }
 
+    const getRecentSermons = async (limit = 6) => {
+        const params = {
+            query: {
+                where: {
+                    _status: {
+                        equals: 'published',
+                    },
+                },
+                sort: '-publishedDate',
+                limit,
+                depth: 2,
+            },
+        }
+
+        try {
+            const recentSermons = await payloadApi<SermonResponse>(
+                '/sermons',
+                params
+            )
+            return recentSermons || []
+        } catch (err) {
+            console.error('Error fetching recent sermons:', err)
+            return []
+        }
+    }
+
+    const getSermonFeedData = async (block: SermonFeedBlock) => {
+        const mode = block.mode ?? 'recent'
+        const limit = block.limit ?? 6
+        const where: Record<string, unknown> = {
+            _status: {
+                equals: 'published',
+            },
+        }
+
+        const relationshipId =
+            mode === 'series'
+                ? getRelationshipId(block.series)
+                : mode === 'speaker'
+                  ? getRelationshipId(block.speaker)
+                  : mode === 'topic'
+                    ? getRelationshipId(block.topic)
+                    : undefined
+
+        if (mode === 'series' || mode === 'speaker' || mode === 'topic') {
+            if (!relationshipId) {
+                console.warn(`Sermon feed mode "${mode}" requires a selection.`)
+                return []
+            }
+
+            where[mode === 'topic' ? 'topics' : mode] = {
+                [mode === 'topic' ? 'contains' : 'equals']: relationshipId,
+            }
+        }
+
+        // The CMS has no separate featured flag; a sermon is featured when it
+        // has a featured image.
+        if (mode === 'featured') {
+            where.featuredImage = {
+                exists: true,
+            }
+        }
+
+        try {
+            return await payloadApi<SermonResponse>('/sermons', {
+                query: {
+                    where,
+                    sort: '-publishedDate',
+                    limit,
+                    depth: 2,
+                },
+            })
+        } catch (err) {
+            console.error('Error fetching sermon feed data:', err)
+            return []
+        }
+    }
+
     const {
         data: sermons,
         pending,
@@ -48,6 +141,8 @@ export const useSermons = () => {
     return {
         findBySlug,
         getSermons,
+        getRecentSermons,
+        getSermonFeedData,
         sermons,
         pending,
         error,

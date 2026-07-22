@@ -32,12 +32,7 @@ const config: NuxtConfig = {
             payloadApiKey: process.env.PAYLOAD_API_KEY,
         },
     },
-    modules: [
-        '@nuxt/eslint',
-        '@pinia/nuxt',
-        '@nuxt/ui',
-        '@nuxt/image',
-    ],
+    modules: ['@nuxt/eslint', '@pinia/nuxt', '@nuxt/ui', '@nuxt/image'],
     /*image: {
         provider: 'twicpics',
         twicpics: {

@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import type { Sermon } from '../../types/sermon'
+import { useRuntimeConfig } from 'nuxt/app'
+
 defineProps<{
     sermon: Sermon
 }>()
+const config = useRuntimeConfig()
 </script>
 
 <template>
     <section class="relative">
         <NuxtImg
             v-if="sermon.featuredImage"
-            :src="sermon.featuredImage.url"
+            :src="`${config.public.payloadUrl}${sermon.featuredImage.url}`"
             :alt="sermon.featuredImage.alt"
             class="h-[420px] w-full object-cover"
         />

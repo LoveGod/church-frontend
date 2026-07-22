@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { Sermon } from '../../types/sermon'
+import { useRuntimeConfig } from 'nuxt/app'
 
 interface Props {
     sermon: Sermon
 }
+
+const config = useRuntimeConfig()
 
 defineProps<Props>()
 </script>
@@ -17,7 +20,7 @@ defineProps<Props>()
         <NuxtLink :to="`/sermons/${sermon.slug}`">
             <NuxtImg
                 v-if="sermon.featuredImage"
-                :src="sermon.featuredImage.url"
+                :src="`${config.public.payloadUrl}${sermon.featuredImage.url}`"
                 :alt="sermon.featuredImage.alt"
                 class="h-56 w-full object-cover"
             />
